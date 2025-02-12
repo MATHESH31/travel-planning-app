@@ -5,10 +5,11 @@ import { useState } from "react";
 const InputField = ({ setPlaces }) => {
     const [mood, setMood] = useState('');
 
+
     const getPlaces = async () => {
         try {
             let prompt = `Generate a JSON array of only three objects, where each object represents a famous travel destination, suitable for a ${mood} trip, and includes the following properties: 'place', 'bestTime', 'currentClimate' and 'budget' (should be in INR).`;
-            const genAI = new GoogleGenerativeAI("AIzaSyAfIpgPi7qkGR5QgWtkFWY-FMn38nH0v3k");
+            const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
             const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
             const result = await model.generateContent(prompt);
@@ -33,8 +34,7 @@ const InputField = ({ setPlaces }) => {
     }
 
     const getImage = async (placeName) => {
-        const UNSPLASH_CLIENT_ID = "4jKrvdkx4CmTbCRnV7pC-tZD0kDqFiwtvEMEHyDQ_qw"
-        const unsplashUrl = `https://api.unsplash.com//search/photos?client_id=${UNSPLASH_CLIENT_ID}&query=`
+        const unsplashUrl = `https://api.unsplash.com//search/photos?client_id=${import.meta.env.VITE_UNSPLASH_CLIENT_ID}&query=`
 
         try {
             const response = await fetch(unsplashUrl + placeName);
