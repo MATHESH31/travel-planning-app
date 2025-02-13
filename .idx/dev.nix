@@ -2,10 +2,17 @@
 # see: https://developers.google.com/idx/guides/customize-idx-env
 { pkgs, ... }: {
   # Which nixpkgs channel to use.
+  services = {
+    docker = {
+      enable = true;
+    };
+  };
   channel = "stable-24.05"; # or "unstable"
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.nodejs_20
+    pkgs.sudo
+    pkgs.docker
   ];
   # Sets environment variables in the workspace
   env = {};
@@ -29,7 +36,7 @@
       enable = true;
       previews = {
         web = {
-          command = ["npm" "run" "dev" "--" "--port" "$PORT" "--host" "0.0.0.0"];
+          command = ["npm" "run" "dev" "--" "--port" "$PORT"];
           manager = "web";
         };
       };
