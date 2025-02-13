@@ -2,10 +2,14 @@ import { Button, Input, InputLabel } from "@mui/material";
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { useState } from "react";
 
-const InputField = ({ setPlaces }) => {
+const InputField = ({ setPlaces, setIsLoading }) => {
     const [mood, setMood] = useState('');
 
-
+    const handleClick = async () => {
+        setIsLoading(true);
+        await getPlaces();
+    }
+    
     const getPlaces = async () => {
         try {
             let prompt = `Generate a JSON array of only three objects, where each object represents a famous travel destination, suitable for a ${mood} trip, and includes the following properties: 'place', 'bestTime', 'currentClimate' and 'budget' (should be in INR).`;
@@ -24,7 +28,7 @@ const InputField = ({ setPlaces }) => {
             const updatedPlaceArray = await Promise.all(imagePromises);
 
             setPlaces(updatedPlaceArray);
-            
+            setIsLoading(false);
 
 
         } catch (error) {
@@ -59,7 +63,7 @@ const InputField = ({ setPlaces }) => {
                 marginLeft: '2%',
                 width: '20%'
             }} onChange={(e) => setMood(e.target.value)} />
-            <Button onClick={getPlaces} variant="contained" sx={{ marginLeft: '2%' }}>Find places</Button>
+            <Button onClick={handleClick} variant="contained" sx={{ marginLeft: '2%' }}>Find places</Button>
         </div>
     )
 }
